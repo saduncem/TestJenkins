@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,15 @@ namespace TestJenkins.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Freezing", "Bracasdiasng", "Chilly", "asdas", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly IUserServices _userServices;
+        
+        public WeatherForecastController(IUserServices userServices,ILogger<WeatherForecastController> logger)
         {
+            _userServices = userServices;
             _logger = logger;
         }
 
@@ -34,6 +37,14 @@ namespace TestJenkins.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet]
+        public IActionResult GetUser()
+        {
+            var name = Summaries.FirstOrDefault();
+            name = _userServices.GetUser(name);
+            return Ok(name);
         }
     }
 }
